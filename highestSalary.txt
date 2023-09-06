@@ -1,0 +1,19 @@
+
+
+Declare @Temp Table (id int , salary int);
+
+Insert into @Temp Values(1,100);
+Insert into @Temp Values(2,200);
+Insert into @Temp Values(3,300);
+
+Select * from @Temp;
+
+WITH cte
+AS
+(SELECT id AS id, salary AS salary,
+Row_Number() OVER(ORDER BY salary DESC) AS salary_rank
+FROM @Temp
+)
+SELECT ISNULL(
+(SELECT DISTINCT salary FROM cte WHERE salary_rank = 3), NULL )
+AS SecondHighestSalary ;
